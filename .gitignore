@@ -2,9 +2,9 @@
 
 # dependencies
 node_modules/
+Database/
 
 #Firebase
-Database/
 
 # Expo
 .expo/
