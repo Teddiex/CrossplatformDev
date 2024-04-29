@@ -3,8 +3,12 @@ import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { firestore } from '../Database/Firebase';
 import FoodListItemTrash from '../components/FoodListItemTrash';
+import Icon from 'react-native-vector-icons/AntDesign';
+import { useNavigation } from '@react-navigation/native';
 
 const ShowMoreScreen = () => {
+
+    const navigation = useNavigation();
     const [foods, setFoods] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -35,8 +39,18 @@ const ShowMoreScreen = () => {
         return () => unsubscribe();  // Cleanup the subscription
     }, []);
 
+
+    const goBack = () => {
+        navigation.goBack();
+    }
     return (
+
         <View style={styles.container}>
+            <Icon name="arrowleft" color={'black'} size={64} onPress={goBack} />
+            <View style={{ flexDirection: 'row', margin: 5 }}>
+                <Text style={{ fontSize: 20 }}>Your Food List</Text>
+                
+            </View>
             {loading ? (
                 <Text>Loading...</Text>
             ) : (
@@ -55,9 +69,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20
+        
     },
     list: {
-        paddingBottom: 20
+        flexGrow: 1,
+        gap: 2
     }
 });
 

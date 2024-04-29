@@ -4,14 +4,20 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { subscribeToMostRecentFood, subscribeToTodaysFoodData } from '../Services/FirestoreService';
 import { useState, useEffect } from 'react';
-import CaloriePieChart from '../components/CaloriesChart';
-import MacroPieChart from '../components/MacroChart';
 
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation, route}) => {
   // Assuming you have state hooks to track these values
 
-  const navigation = useNavigation();
+  
+  const [goals, setGoals] = useState({
+    calories: 2000,
+    protein: 100,
+    carbs: 300,
+    fat: 70
+  });
+
+  const calorie = goals.calories;
 
   const [caloriesGoal, setCaloriesGoal] = useState(2000);
   const [caloriesIntake, setCaloriesIntake] = useState(0);
@@ -37,11 +43,18 @@ const HomeScreen = () => {
   }, []);
 
 
+  useEffect(() => {
+    if (route.params?.goals) {
+      setGoals(route.params.goals);
+    }
+  }, [route.params?.goals]);
+
+
 
   const onEditGoalPress = () => {
-    // Navigate to the Edit Goal screen
-    navigation.navigate('Edit Goal Screen');
-  }
+    // Pass current goal as a parameter to EditGoalScreen
+    navigation.navigate('Edit Goal Screen', { goals });
+  };
 
   const onShowMorePress = () => {
     navigation.navigate('Show More Screen');
@@ -53,9 +66,11 @@ const HomeScreen = () => {
         <Text style={styles.title}>Calories</Text>
         <View style={styles.row}>
         <View>
+        <View style={styles.container}>
+        </View>
         <View style={{flexDirection: 'row'}}>
           <MaterialCommunityIcons name = 'flag' style={{margin:5}}/>
-          <Text>Goal: {caloriesGoal}</Text>
+          <Text>Goal: {goals.calories}</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
           <MaterialCommunityIcons name = 'food' style={{margin:5}}/>
@@ -63,15 +78,15 @@ const HomeScreen = () => {
           </View>
         </View>
       </View>
-        
         <TouchableOpacity style={styles.editButton} onPress={onEditGoalPress}>
           <Text>Edit</Text>
         </TouchableOpacity>
+
+        
       </View>
 
       <View style={styles.section}>
         <Text style={styles.title}>Macros</Text>
-        {/* Insert progress circle components for macros here */}
         <View style={styles.row}>
           <Text>Protein {Math.round(macros.protein)}g</Text>
           <Text>Carbs {Math.round(macros.carbs)}g</Text>
@@ -80,11 +95,12 @@ const HomeScreen = () => {
       </View>
 
       <View style={styles.section}>
-        <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row'}}>
         <Text style={styles.title}>Recent Food</Text>
         <TouchableOpacity style = {styles.showMoreButton} onPress={onShowMorePress}>
           <Text>Show More</Text>
         </TouchableOpacity>
+        
         </View>
         <View styles={styles.row}>
         <Text>{recentFoodName}</Text>
@@ -128,12 +144,16 @@ const styles = StyleSheet.create({
     top: 10,
     right: 10,
     padding: 5,
+    borderWidth: 1,
+    backgroundColor: 'lightgrey'
   },
   showMoreButton: {
     position: 'absolute',
     top: 10,
     right: 10,
     padding: 5,
+    borderWidth: 1,
+    backgroundColor: 'lightgrey'
   },
 });
 

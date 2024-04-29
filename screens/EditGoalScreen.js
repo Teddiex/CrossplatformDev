@@ -1,80 +1,59 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, Button } from 'react-native';
-import GoalModalScreen from './GoalModalScreen'; // Import the goal modal screen
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 const EditGoalScreen = () => {
   const navigation = useNavigation();
-  const [selectedNutrient, setSelectedNutrient] = useState(null);
+  const route = useRoute();
+  const initialGoals = route.params.goals;
+
   const [goals, setGoals] = useState({
-    calories: '2000',
-    carbs: '250',
-    protein: '100',
-    fat: '80',
+    calories: initialGoals.calories,
+    protein: initialGoals.protein,
+    carbs: initialGoals.carbs,
+    fat: initialGoals.fat
   });
 
-  const goBack = () => {
-    navigation.goBack();
-  };
-
-  // Handler to be called when an item is pressed
-  const onItemPress = (nutrient) => {
-    setSelectedNutrient(nutrient);
-  };
-
-  // Handler to close the modal
-  const closeModal = () => {
-    setSelectedNutrient(null);
-  };
-
-  // Handler to update goal
-  const updateGoal = (nutrient, newGoal) => {
-    setGoals(prevGoals => ({
-      ...prevGoals,
-      [nutrient]: newGoal
+  const handleInputChange = (name, value) => {
+    setGoals(prev => ({
+      ...prev,
+      [name]: value
     }));
   };
 
+  const handleSaveGoals = () => {
+    navigation.navigate('Home Screen', { goals });
+  };
+
+  const goBack = () => {
+    navigation.goBack();
+  }
+
   return (
-    <View style={styles.container}>
-      <View style={{ justifyContent: 'space-between', margin: 5 }}>
-        <Icon name="arrowleft" color={'black'} size={64} onPress={goBack} />
+      <View style={styles.container}>
+        <View style={styles.iconContainer}>
+          <Icon name="arrowleft" color={'black'} size={64} onPress={goBack} />
+        </View>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Edit Goal</Text>
+        </View>
+      <View style={styles.inputGroup}>
+        {Object.entries(goals).map(([key, value]) => (
+          <View key={key} style={styles.inputContainer}>
+            <Text style={styles.label}>{key.charAt(0).toUpperCase() + key.slice(1)}:</Text>
+            <TextInput
+              style={styles.input}
+              value={String(value)}
+              onChangeText={(newValue) => handleInputChange(key, newValue)}
+              keyboardType="numeric"
+            />
+          </View>
+        ))}
       </View>
-      <Text style={styles.headerText}>Edit Goals</Text>
-      <TouchableOpacity onPress={() => onItemPress('calories')} style={styles.item}>
-        <Text style={styles.label}>Calories</Text>
-        <Text style={styles.value}>{goals.calories}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => onItemPress('carbs')} style={styles.item}>
-        <Text style={styles.label}>Carbohydrates</Text>
-        <Text style={styles.value}>{goals.carbs}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => onItemPress('protein')} style={styles.item}>
-        <Text style={styles.label}>Protein</Text>
-        <Text style={styles.value}>{goals.protein}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => onItemPress('fat')} style={styles.item}>
-        <Text style={styles.label}>Fat</Text>
-        <Text style={styles.value}>{goals.fat}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleSaveGoals}>
         <Text style={styles.buttonText}>Finish Editing</Text>
       </TouchableOpacity>
-
-      {/* Modal to edit goal */}
-      <Modal
-        visible={selectedNutrient !== null}
-        transparent={true}
-        animationType="slide"
-      >
-        <GoalModalScreen
-          nutrient={selectedNutrient}
-          currentGoal={goals[selectedNutrient]}
-          onSave={(newGoal) => updateGoal(selectedNutrient, newGoal)}
-          onClose={closeModal}
-        />
-      </Modal>
     </View>
   );
 };
@@ -82,42 +61,63 @@ const EditGoalScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingTop: 20,
+  },
+  iconContainer: {
+    alignSelf: 'flex-start',
+    marginLeft: 10,
+    paddingBottom: 10
+  },
+  header: {
+    width: '100%',
+    marginBottom: 20,
+    paddingHorizontal: 10,
   },
   headerText: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
-    margin: 5
   },
-  item: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-    marginVertical: 5,
-    borderWidth: 1,
+  inputGroup: {
+    width: '90%',
     borderRadius: 5,
+    borderWidth: 1,
     borderColor: '#000',
+    marginBottom: 20,
+    padding: 10,
+  },
+  inputContainer: {
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    paddingBottom: 5,
+    marginBottom: 5,
   },
   label: {
     fontSize: 18,
+    color: '#333',
+    marginBottom: 5,
   },
-  value: {
+  input: {
+    width: '100%',
     fontSize: 18,
-    fontWeight: 'bold',
+    padding: 10,
+    backgroundColor: '#e7e7e7',
+    borderRadius: 5,
+    marginBottom: 10,
   },
   button: {
-    backgroundColor: 'green',
-    borderRadius: 5,
-    padding: 10,
+    backgroundColor: '#4CAF50', 
+    padding: 15,
+    borderRadius: 10,
     alignItems: 'center',
-    marginTop: 15,
+    justifyContent: 'center',
   },
   buttonText: {
-    color: 'white',
+    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-  },
+  }
 });
 
 export default EditGoalScreen;

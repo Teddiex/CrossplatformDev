@@ -13,6 +13,7 @@ export const addFoodToDatabase = async (foodData, barcode) => {
       protein: foodData.nutriments.proteins_100g,
       fat: foodData.nutriments.fat_100g,
       barcode: barcode,
+      brand: foodData.brands,
       createdAt: serverTimestamp()
     });
     console.log('Food added successfully with ID: ' + docRef.id);
