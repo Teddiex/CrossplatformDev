@@ -20,7 +20,14 @@ export default function Search() {
     searchAPI(searchTerm)
       .then(data => {
         setLoading(false);
-        setSearchResults(data.products);
+        const validProducts = data.products.filter(product =>
+          product.product_name && 
+          product.product_name.trim() !== '' && // Checks for a valid product name
+          product.nutriments && // Checks if nutriments object exists
+          Object.keys(product.nutriments).length > 0 && // Checks if nutriments object is not empty
+          product.nutriments['energy-kcal_100g'] != null // Checks if energy-kcal_100g is not null or undefined
+        );
+        setSearchResults(validProducts);
         if (!history.includes(searchTerm)) {
           setHistory(prevHistory => [...prevHistory, searchTerm]);
         }
@@ -39,6 +46,8 @@ export default function Search() {
   const deleteHistoryItem = (term) => {
     setHistory(prevHistory => prevHistory.filter(item => item !== term));
   };
+
+  
 
   return (
     <View style={styles.container}>

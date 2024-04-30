@@ -31,9 +31,9 @@ export function parseProductInfoFromApi(json, barcode){
                 product_name: 'Product not found',
                 brands: 'Brand not found',
                 nutriments: {
-                    'energy-kcal': '0',
+                    'energy-kcal_100g': '0',
                     'energy-kcal-unit': 'kcal',
-                    'carbohydrates': '0',
+                    'carbohydrates_100g': '0',
                     'carbohydrates_unit': 'g',
                     'proteins_100g': '0',
                     'proteins_unit': 'g',

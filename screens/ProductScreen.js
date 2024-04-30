@@ -7,9 +7,13 @@ import { addFoodToDatabase } from '../Services/FirestoreService';
 
 const ProductScreen = ({route}) => {
   const [foodData, setFoodData] = useState(null);
-  const {barcode} = route.params;
+  const {barcode, item} = route.params;
 
   const navigation = useNavigation();
+
+  const previousRoute = navigation.getState().routes[navigation.getState().index - 1];
+
+  console.log('Previous route:', previousRoute);
 
   useEffect(() => {
     // Fetch product information based on the barcode
@@ -20,11 +24,14 @@ const ProductScreen = ({route}) => {
 
       })
       .catch((error) => {
+        console.log(foodData);
         console.error('Error fetching product information:', error);
       });
   }, [barcode]);
 
- 
+  const goBack = () => {
+    navigation.goBack();
+  }
   
 
   if (!foodData || foodData.length === 0) {
@@ -35,9 +42,50 @@ const ProductScreen = ({route}) => {
     );
   }
 
-  const goBack = () => {
-    navigation.goBack();
+  if (previousRoute.name === 'Show More Screen')
+  {
+    return (
+      <View style={styles.container}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', margin: 15}}>
+          <TouchableOpacity onPress={goBack} styles= {{margin: 100}}>
+            <Icon name="arrowleft" color={'black'} size={64}/>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.headerText}>Add Food</Text>
+        <View style={styles.detailsContainer}>
+          <Text style={styles.foodName}>{item.product_name}</Text>
+          <Text style={styles.nutrientLabel}>Calories: <Text style={styles.nutrientValue}>{parseFloat(item.nutriments['energy-kcal']).toFixed(1)} kcal</Text></Text>
+          <Text style={styles.nutrientLabel}>Carbohydrates: <Text style={styles.nutrientValue}>{parseFloat(item.carbohydrates).toFixed(1)} g</Text></Text>
+          <Text style={styles.nutrientLabel}>Protein: <Text style={styles.nutrientValue}>{parseFloat(item.protein).toFixed(1)} g</Text></Text>
+          <Text style={styles.nutrientLabel}>Fat: <Text style={styles.nutrientValue}>{parseFloat(item.fat).toFixed(1)} g</Text></Text>
+          <Text style={styles.nutrientLabel}>Quantity: <Text style={styles.nutrientValue}>{item.weight}g</Text></Text>
+          <Image source = {{uri: `https://static.openfoodfacts.org/images/misc/nutriscore-${foodData.nutrition_grades}.png`}} style = {styles.imageNutri}/>
+          <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.cancelButton} onPress={goBack}>
+            <Text style={styles.buttonText}>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => {
+          addFoodToDatabase(foodData, barcode)
+            .then(() => {
+              alert('Product Added');
+            })
+            .catch(error => {
+              alert('Failed to add product: ' + error.message);
+            });}}>
+            <Text style={styles.buttonText}>Add Food</Text>
+          </TouchableOpacity>
+        </View>
+        </View>
+      </View>
+    );
   }
+  else{
+
+  
+
+  
 
   return (
     <View style={styles.container}>
@@ -45,6 +93,9 @@ const ProductScreen = ({route}) => {
         <TouchableOpacity onPress={goBack} styles= {{margin: 100}}>
           <Icon name="arrowleft" color={'black'} size={64}/>
         </TouchableOpacity>
+        <View style={{borderWidth: 1, justifyContent: 'center'}}>
+          <Text style={{fontSize: 12, fontWeight: 'bold'}}>Note: Based on 100g of the item</Text>
+        </View>
       </View>
       <Text style={styles.headerText}>Add Food</Text>
       <View style={styles.detailsContainer}>
@@ -55,16 +106,22 @@ const ProductScreen = ({route}) => {
         <Text style={styles.nutrientLabel}>Fat: <Text style={styles.nutrientValue}>{parseFloat(foodData.nutriments.fat_100g).toFixed(1)} g</Text></Text>
         <Image source = {{uri: `https://static.openfoodfacts.org/images/misc/nutriscore-${foodData.nutrition_grades}.png`}} style = {styles.imageNutri}/>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.cancelButton} onPress={goBack}>
-            <Text style={styles.buttonText}>Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.addButton} onPress={() => addFoodToDatabase(foodData, barcode).then(alert('Product Added'))}>
-            <Text style={styles.buttonText}>Add Food</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.cancelButton} onPress={goBack}>
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.addButton} onPress={() => addFoodToDatabase(foodData, barcode).then(alert('Product Added'))}>
+          <Text style={styles.buttonText}>Add Food</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.enterWeightContainer}>
+        <TouchableOpacity style={styles.enterWeightButton} onPress={() => navigation.navigate('Product Details Screen', { foodData, barcode })}>
+          <Text style={styles.buttonText}>Enter Weight</Text>
+        </TouchableOpacity>
+      </View>
       </View>
     </View>
   );
+}
 };
 
 const styles = StyleSheet.create({
@@ -102,6 +159,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'center', // Align items vertically in the center
     marginTop: 20,
   },
   cancelButton: {
@@ -116,6 +174,16 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     flex: 0.4,
+    alignItems: 'center',
+  },
+  enterWeightContainer: {
+    alignItems: 'center', // Center the content horizontally
+  },
+  enterWeightButton: {
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20, // Add marginTop to create space between buttons
     alignItems: 'center',
   },
   buttonText: {

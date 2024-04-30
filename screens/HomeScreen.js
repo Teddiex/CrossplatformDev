@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { subscribeToMostRecentFood, subscribeToTodaysFoodData } from '../Services/FirestoreService';
 import { useState, useEffect } from 'react';
+import CaloriePieChart from '../components/PieChart';
 
 
 const HomeScreen = ({navigation, route}) => {
@@ -60,30 +61,31 @@ const HomeScreen = ({navigation, route}) => {
     navigation.navigate('Show More Screen');
   }
 
+
+
+  
   return (
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Calories</Text>
         <View style={styles.row}>
-        <View>
-        <View style={styles.container}>
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <MaterialCommunityIcons name = 'flag' style={{margin:5}}/>
-          <Text>Goal: {goals.calories}</Text>
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <MaterialCommunityIcons name = 'food' style={{margin:5}}/>
-          <Text>Intake: {caloriesIntake}</Text>
+          <View style={styles.textContainer}>
+            <View style={styles.row}>
+              <MaterialCommunityIcons name='flag' style={{ margin: 5 }} />
+              <Text>Goal: {goals.calories}</Text>
+            </View>
+            <View style={styles.row}>
+              <MaterialCommunityIcons name='food' style={{ margin: 5 }} />
+              <Text>Intake: {caloriesIntake}</Text>
+            </View>
           </View>
+          <CaloriePieChart caloriesGoal={goals.calories} caloriesIntake={caloriesIntake} />
         </View>
-      </View>
         <TouchableOpacity style={styles.editButton} onPress={onEditGoalPress}>
           <Text>Edit</Text>
         </TouchableOpacity>
-
-        
       </View>
+      
 
       <View style={styles.section}>
         <Text style={styles.title}>Macros</Text>
@@ -95,19 +97,14 @@ const HomeScreen = ({navigation, route}) => {
       </View>
 
       <View style={styles.section}>
-        <View style={{flexDirection: 'row'}}>
-        <Text style={styles.title}>Recent Food</Text>
-        <TouchableOpacity style = {styles.showMoreButton} onPress={onShowMorePress}>
-          <Text>Show More</Text>
-        </TouchableOpacity>
-        
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Text style={styles.title}>Recent Food</Text>
+          <TouchableOpacity style={styles.showMoreButton} onPress={onShowMorePress}>
+            <Text>Show More</Text>
+          </TouchableOpacity>
         </View>
-        <View styles={styles.row}>
-        <Text>{recentFoodName}</Text>
-        <Text>Calories: {recentFoodCalories}</Text>
-        </View>
-        
-        {/* Insert pagination indicators here */}
+          <Text>{recentFoodName}</Text>
+          <Text>Calories: {recentFoodCalories}</Text>
       </View>
     </View>
   );
@@ -125,19 +122,23 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     borderWidth: 1,
-    alignContent: 'center',
     borderColor: 'black',
   },
   title: {
     fontWeight: 'bold',
     fontSize: 18,
+    marginBottom: 10,
+    
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    margin: 50
+    
+  },
+  textContainer: {
+    flex: 1,
+    paddingRight: 10, // Add padding to separate text from chart
   },
   editButton: {
     position: 'absolute',
@@ -148,9 +149,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgrey'
   },
   showMoreButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
     padding: 5,
     borderWidth: 1,
     backgroundColor: 'lightgrey'

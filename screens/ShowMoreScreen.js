@@ -20,14 +20,14 @@ const ShowMoreScreen = () => {
             const foodsList = querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
-                product_name: doc.data().productName,
+                product_name: doc.data().product_name,
                 nutriments: {
-                    'energy-kcal_100g': doc.data().calories
+                    'energy-kcal': doc.data().calories
                 },
                 carbohydrates: doc.data().carbohydrates,
                 protein: doc.data().protein,
                 fat: doc.data().fat,
-                brands: doc.data().brand || 'Unknown'
+                brands: doc.data().brands || 'Unknown'
             }));
             setFoods(foodsList);
             setLoading(false);

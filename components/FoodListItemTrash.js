@@ -5,8 +5,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const FoodListItemTrash = ({ item }) => {
 
-    console.log(item);
-
     const navigation = useNavigation();
 
     const onItemPress = (item) => {
@@ -14,7 +12,7 @@ const FoodListItemTrash = ({ item }) => {
         const barcode = item.code || item.barcode;
 
         if (barcode) {
-            navigation.navigate('Product Screen', { barcode });
+            navigation.navigate('Product Screen', { barcode, item });
         
         }
         else {
@@ -48,7 +46,7 @@ const FoodListItemTrash = ({ item }) => {
             <View style={styles.container}>
                 <View style={{ flex: 1, gap: 5 }}>
                     <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.product_name}</Text>
-                    <Text style={{ color: 'dimgray' }}>{item.nutriments['energy-kcal_100g']} kcal, {item.brands}</Text>
+                    <Text style={{ color: 'dimgray' }}>{item.nutriments['energy-kcal']} kcal, {item.brands}</Text>
                     <Text style={{ color: 'dimgray' }}>Added: {itemCreatedAt}</Text>
                 </View>
                 <TouchableOpacity onPress={() => onTrashPressed(item)}>

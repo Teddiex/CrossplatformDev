@@ -6,6 +6,8 @@ import { addFoodToDatabase } from '../Services/FirestoreService';
 const FoodListItem = ({ item }) => {
     const navigation = useNavigation();
 
+    console.log('Item:', item);
+
     const onItemPress = (item) => {
         
         const barcode = item.code || item.barcode;

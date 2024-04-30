@@ -1,19 +1,21 @@
 import { firestore } from '../Database/Firebase'; 
 import { collection, addDoc, serverTimestamp, query, orderBy, limit, where, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
 
-export const addFoodToDatabase = async (foodData, barcode) => {
+export const addFoodToDatabase = async (foodData, barcode, quantity) => {
+  console.log('Adding food to database:', foodData);
   try {
     if (!barcode){
       barcode = foodData.code;
     }
     const docRef = await addDoc(collection(firestore, "foods"), {
-      productName: foodData.product_name,
-      calories: foodData.nutriments['energy-kcal_100g'],
-      carbohydrates: foodData.nutriments.carbohydrates_100g,
-      protein: foodData.nutriments.proteins_100g,
-      fat: foodData.nutriments.fat_100g,
+      product_name: foodData.product_name,
+      calories: foodData.nutriments['energy-kcal_100g'] ?? foodData.calories, //these are the values if the user has entered a custom weight
+      carbohydrates: foodData.nutriments.carbohydrates_100g ?? foodData.carbohydrates,
+      protein: foodData.nutriments.proteins_100g ?? foodData.protein, 
+      fat: foodData.nutriments.fat_100g ?? foodData.fat,
       barcode: barcode,
-      brand: foodData.brands,
+      brands: foodData.brands,
+      weight: quantity || 100,
       createdAt: serverTimestamp()
     });
     console.log('Food added successfully with ID: ' + docRef.id);
@@ -30,7 +32,7 @@ export const subscribeToMostRecentFood = (updateRecentFoodName, updateRecentFood
   const unsubscribe = onSnapshot(q, (snapshot) => {
     if (!snapshot.empty) {
       const mostRecentFoodDoc = snapshot.docs[0].data();
-      updateRecentFoodName(mostRecentFoodDoc.productName);
+      updateRecentFoodName(mostRecentFoodDoc.product_name);
       updateRecentFoodCalories(mostRecentFoodDoc.calories);
       
     }

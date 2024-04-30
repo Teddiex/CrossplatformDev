@@ -9,6 +9,7 @@ import BarcodeScanner from '../components/BarcodeScanner';
 import ProductScreen from '../screens/ProductScreen';
 import EditGoalScreen from '../screens/EditGoalScreen';
 import ShowMoreScreen from '../screens/ShowMoreScreen';
+import ProductDetailsScreen from '../screens/ProductDetailsScreen';
 
 
 const ScanNav = () => {
@@ -27,6 +28,7 @@ const SearchNav = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Search Screen" component={SearchScreen}/>
       <Stack.Screen name="Product Screen" component={ProductScreen}/>
+      <Stack.Screen name="Product Details Screen" component={ProductDetailsScreen}/>
     </Stack.Navigator>
   );
 }
@@ -39,6 +41,7 @@ const HomeNav = () => {
       <Stack.Screen name="Edit Goal Screen" component={EditGoalScreen}/>
       <Stack.Screen name="Show More Screen" component={ShowMoreScreen}/>
       <Stack.Screen name="Product Screen" component={ProductScreen}/>
+      <Stack.Screen name="Product Details Screen" component={ProductDetailsScreen}/>
 
     </Stack.Navigator>
   );
