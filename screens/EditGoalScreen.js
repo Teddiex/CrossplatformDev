@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 
@@ -31,7 +31,8 @@ const EditGoalScreen = () => {
   }
 
   return (
-      <View style={styles.container}>
+      <ScrollView 
+      contentContainerStyle = {styles.container}>
         <View style={styles.iconContainer}>
           <Icon name="arrowleft" color={'black'} size={64} onPress={goBack} />
         </View>
@@ -54,7 +55,7 @@ const EditGoalScreen = () => {
       <TouchableOpacity style={styles.button} onPress={handleSaveGoals}>
         <Text style={styles.buttonText}>Finish Editing</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 20,
     paddingHorizontal: 10,
+    paddingLeft: 20,
   },
   headerText: {
     fontSize: 22,
