@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import { subscribeToMostRecentFood, subscribeToTodaysFoodData } from '../Services/FirestoreService';
 import { useState, useEffect } from 'react';
 import CaloriePieChart from '../components/PieChart';
@@ -65,7 +64,8 @@ const HomeScreen = ({navigation, route}) => {
 
   
   return (
-    <View style={styles.container}>
+    <ScrollView 
+    contentContainerStyle ={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>Calories</Text>
         <View style={styles.row}>
@@ -106,7 +106,7 @@ const HomeScreen = ({navigation, route}) => {
           <Text>{recentFoodName}</Text>
           <Text>Calories: {recentFoodCalories}</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
