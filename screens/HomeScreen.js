@@ -16,10 +16,6 @@ const HomeScreen = ({navigation, route}) => {
     carbs: 300,
     fat: 70
   });
-
-  const calorie = goals.calories;
-
-  const [caloriesGoal, setCaloriesGoal] = useState(2000);
   const [caloriesIntake, setCaloriesIntake] = useState(0);
   const [macros, setMacros] = useState({ protein: '0', carbs: '0', fat: '0' });
   const [recentFoodName, setRecentFood] = useState('');
@@ -90,9 +86,18 @@ const HomeScreen = ({navigation, route}) => {
       <View style={styles.section}>
         <Text style={styles.title}>Macros</Text>
         <View style={styles.row}>
-          <Text>Protein {Math.round(macros.protein)}g</Text>
-          <Text>Carbs {Math.round(macros.carbs)}g</Text>
-          <Text>Fat {Math.round(macros.fat)}g</Text>
+          <View >
+          <Text>Protein: {Math.round(macros.protein)}g</Text>
+          <Text>Goal: {goals.protein}g</Text>
+          </View>
+          <View>
+          <Text>Carbs: {Math.round(macros.carbs)}g</Text>
+          <Text>Goal: {goals.carbs}g</Text>
+          </View>
+          <View>
+          <Text>Fat: {Math.round(macros.fat)}g</Text>
+          <Text>Goal: {goals.fat}g</Text>
+          </View>
         </View>
       </View>
 

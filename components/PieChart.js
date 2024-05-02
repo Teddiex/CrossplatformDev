@@ -1,8 +1,13 @@
 import React from 'react';
 import { PieChart } from 'react-native-chart-kit';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
 const CaloriePieChart = ({ caloriesGoal, caloriesIntake }) => {
+
+    const screenWidth = Dimensions.get("window").height;
+    console.log('Screen width:', screenWidth);
+    const chartSize = Math.min(screenWidth*0.07, 80)
+
     const chartData = [
         {
             name: "Remaining",
@@ -34,8 +39,8 @@ const CaloriePieChart = ({ caloriesGoal, caloriesIntake }) => {
         <View style={styles.chartContainer}>
             <PieChart
                 data={chartData}
-                width={80} // Adjusted for visual fit
-                height={80} // Adjusted for visual fit
+                width={chartSize} // Adjusted for visual fit
+                height={chartSize} // Adjusted for visual fit
                 chartConfig={chartConfig}
                 accessor={"calories"}
                 backgroundColor={"transparent"}

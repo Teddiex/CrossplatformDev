@@ -31,14 +31,13 @@ const EditGoalScreen = () => {
   }
 
   return (
-      <ScrollView 
-      contentContainerStyle = {styles.container}>
-        <View style={styles.iconContainer}>
-          <Icon name="arrowleft" color={'black'} size={64} onPress={goBack} />
-        </View>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Edit Goal</Text>
-        </View>
+    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+      <View style={styles.iconContainer}>
+        <Icon name="arrowleft" color={'black'} size={64} onPress={goBack} />
+      </View>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Edit Goal</Text>
+      </View>
       <View style={styles.inputGroup}>
         {Object.entries(goals).map(([key, value]) => (
           <View key={key} style={styles.inputContainer}>
@@ -61,7 +60,7 @@ const EditGoalScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: 20,

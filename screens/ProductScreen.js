@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { getProductInfoFromApi, parseProductInfoFromApi } from '../API/OFF';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -45,7 +45,7 @@ const ProductScreen = ({route}) => {
   if (previousRoute.name === 'Show More Screen')
   {
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between', margin: 15}}>
           <TouchableOpacity onPress={goBack} styles= {{margin: 100}}>
             <Icon name="arrowleft" color={'black'} size={64}/>
@@ -78,7 +78,7 @@ const ProductScreen = ({route}) => {
           </TouchableOpacity>
         </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
   else{
@@ -88,7 +88,7 @@ const ProductScreen = ({route}) => {
   
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={{flexDirection: 'row', justifyContent: 'space-between', margin: 15}}>
         <TouchableOpacity onPress={goBack} styles= {{margin: 100}}>
           <Icon name="arrowleft" color={'black'} size={64}/>
@@ -119,14 +119,14 @@ const ProductScreen = ({route}) => {
         </TouchableOpacity>
       </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     paddingTop: 20,
   },
   headerText: {
